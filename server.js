@@ -7,7 +7,7 @@ const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 const connectDB = require('./config/dbConn');
 const mongoose = require('mongoose');
-const PORT = process.env.PORT || 3500
+const PORT = process.env.PORT || 3500;
 
 // Mongo DB connection
 connectDB();
@@ -19,7 +19,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // // Built-in middleware serve static files
-app.use("/", express.static(path.join(__dirname, "/public")));
+app.use('/', express.static(path.join(__dirname, '/public')));
 
 // Route to public html page
 app.use('/', require('./routes/root'));
