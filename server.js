@@ -3,31 +3,29 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
-const connectDB = require('./config/dbConn');
-const corsOptions = require('./config/corsOptions');
-const mongoose = require('mongoose');
 const cors = require('cors');
-const PORT = process.env.PORT || 3500;
+const corsOptions = require('./config/corsOptions');
+const connectDB = require('./config/dbConn');
+const mongoose = require('mongoose');
+const PORT = process.env.PORT || 3500
 
+// Mongo DB connection
 connectDB();
 
-// CORS
+// Cross Origin Resource Sharing
 app.use(cors(corsOptions));
 
-// middleware
-app.use(express.urlencoded({ extended: false }));
-
-// middleware for json
+// Built-in middleware for json 
 app.use(express.json());
 
-// serve static files
-app.use('/', express.static(path.join(__dirname, '/public')));
+// // Built-in middleware serve static files
+app.use("/", express.static(path.join(__dirname, "/public")));
 
-// routes
+// Route to public html page
 app.use('/', require('./routes/root'));
-
 app.use('/states', require('./routes/api/states'));
 
+// Route does not exist, catch all
 app.all('*', (req, res) => {
   res.status(404);
   if (req.accepts('html')) {

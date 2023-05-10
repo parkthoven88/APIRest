@@ -4,10 +4,12 @@ const Schema = mongoose.Schema;
 const stateSchema = new Schema({
     stateCode: {
         type: String,
-        required: true,
+        require: true,
         unique: true
-    },
-    funfacts: [String]
-});
+    }, 
+    funfacts: [{
+        type: String
+    }]
+})
 
 module.exports = mongoose.model('State', stateSchema);

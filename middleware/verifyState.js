@@ -1,12 +1,25 @@
-const states = require("../model/statesData.json");
-const stateAbbreviations = new Array(50);
+const statesData = require('../model/statesData.json');
 
-for (i = 0; i < 50; i++) {
-  stateAbbreviations.push(states[i].code);
+const getStatesJSON = (req, res, next) => {
+    const statesJSON = JSON.stringify(statesData);
+    const statesObj = JSON.parse(statesJSON);
+    req.states = statesObj;
+    req.state = statesObj.filter(state => state.code === req.code)[0];
+    next()
 }
 
-const verifyState = (state) => {
-  return stateAbbreviations.includes(state.toUpperCase());
-};
+const verifyState = async (req, res, next) => {
+    const stateCodes = statesData.map((state) => state.code);
+    const code = req.params.state;
+    
+    const index = stateCodes.indexOf(code.toUpperCase());
 
-module.exports = verifyState;
+    if (index < 0) {
+        res.json({'message': 'Invalid state abbreviation parameter'});
+    } else {
+        req.code = stateCodes[index];
+        next()
+    }
+}
+
+module.exports = { verifyState, getStatesJSON };
